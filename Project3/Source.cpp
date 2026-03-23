@@ -5,23 +5,41 @@ class TransportStrategy
 {
 public:
 	virtual void drive() = 0;
+	virtual ~TransportStrategy() = default;
 };
 class BikeStrategy : public TransportStrategy
 {
 public:
 	void drive() override
 	{
-		if (getSum())
+		cout << "Bicycle selected (sum = 5, luggage = 0)" << endl;
+	}
+};
+class BusStrategy : public TransportStrategy
+{
+public:
+	void drive() override
+	{
+		cout << "Bus selected (sum = 50, luggage = 1)" << endl;
+	}
+};
+class TaxiStrategy : public TransportStrategy
+{
+public:
+	void drive() override
+	{
+		cout << "Taxi selected (sum = 500, luggage = 1)" << endl;
 	}
 };
 
 class Human
 {
 protected:
+	TransportStrategy* strategy;
 	double sum;
 	bool luggage;
 public:
-	Human(double s, bool l) : sum(s), luggage(l) {}
+	Human(double s, bool l) : sum(s), luggage(l), strategy(nullptr) {}
 	double getSum()
 	{
 		return sum;
@@ -30,10 +48,57 @@ public:
 	{
 		return luggage;
 	}
+	void setStrategy(TransportStrategy* strategy)
+	{
+		this->strategy = strategy;
+	}
+	void driveExecute()
+	{
+		if (strategy)
+		{
+			strategy->drive();
+		}
+		else
+		{
+			cout << "NOT ENOUGH MONEY!" << endl;
+		}
+	}
 };
 
 int main()
 {
+	cout << "- AVAILABLE VIHECLES -" << endl;
+	cout << "1) Bike: price - 5, NO luggage" << endl;
+	cout << "2) Bus: price - 50, luggage is ALLOWED" << endl;
+	cout << "3) Taxi: price - 500, luggage is ALLOWED" << endl << endl;
 
+	double money;
+	cout << "Enter your amount of money" << endl;
+	cout << "Money: ";
+	cin >> money;
+
+	bool isLuggage;
+	cout << "Enter luggage information (1 - with luggage, 0 - without luggage)" << endl;
+	cout << "Luggage: ";
+	cin >> isLuggage;
+
+	Human human = Human(money, isLuggage);
+	BikeStrategy bike;
+	BusStrategy bus;
+	TaxiStrategy taxi;
+
+	if (human.getSum() >= 5 || human.getLuggage() == 0)
+	{
+		human.setStrategy(&bike);
+	}
+	else if (human.getSum() >= 50 || human.getLuggage() == 1)
+	{
+		human.setStrategy(&bus);
+	}
+	else if (human.getSum() >= 500 || human.getLuggage() == 1)
+	{
+		human.setStrategy(&taxi);
+	}
+	human.driveExecute();
 	return 0;
 }
