@@ -12,7 +12,7 @@ class BikeStrategy : public TransportStrategy
 public:
 	void drive() override
 	{
-		cout << "Bicycle selected (sum = 5, luggage = 0)" << endl;
+		cout << "Bicycle selected" << endl;
 	}
 };
 class BusStrategy : public TransportStrategy
@@ -20,7 +20,7 @@ class BusStrategy : public TransportStrategy
 public:
 	void drive() override
 	{
-		cout << "Bus selected (sum = 50, luggage = 1)" << endl;
+		cout << "Bus selected" << endl;
 	}
 };
 class TaxiStrategy : public TransportStrategy
@@ -28,7 +28,7 @@ class TaxiStrategy : public TransportStrategy
 public:
 	void drive() override
 	{
-		cout << "Taxi selected (sum = 500, luggage = 1)" << endl;
+		cout << "Taxi selected" << endl;
 	}
 };
 
@@ -60,7 +60,7 @@ public:
 		}
 		else
 		{
-			cout << "NOT ENOUGH MONEY!" << endl;
+			cout << "NO POSSIBLE OPTIONS!" << endl;
 		}
 	}
 };
@@ -87,17 +87,17 @@ int main()
 	BusStrategy bus;
 	TaxiStrategy taxi;
 
-	if (human.getSum() >= 5 || human.getLuggage() == 0)
+	if (human.getSum() >= 500 && human.getLuggage() == 1)
 	{
-		human.setStrategy(&bike);
+		human.setStrategy(&taxi);
 	}
-	else if (human.getSum() >= 50 || human.getLuggage() == 1)
+	else if (human.getSum() >= 50 && human.getLuggage() == 1)
 	{
 		human.setStrategy(&bus);
 	}
-	else if (human.getSum() >= 500 || human.getLuggage() == 1)
+	else if (human.getSum() >= 5 && human.getLuggage() == 0)
 	{
-		human.setStrategy(&taxi);
+		human.setStrategy(&bike);
 	}
 	human.driveExecute();
 	return 0;
